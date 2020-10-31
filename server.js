@@ -21,7 +21,7 @@ db.once('open', function() {
 
 setInterval(webscraping.dataFatch, 25 * 60 * 1000);
 
-app.post("/",user.createUser)
+app.post("/signup",user.createUser)
 app.post("/login",user.loginUser)
 app.get("/data",webscraping.dataFatch)
 app.post("/topstories",topStories.pushtopStories);

@@ -1,7 +1,6 @@
 const User = require("../model/user");
 const Utility = require("../services/utility");
 const jwt = require("jsonwebtoken");
-const user = require("../model/user");
 
 exports.createUser = async (req, res) => {
   //checking if password and confirm password same
@@ -11,10 +10,14 @@ exports.createUser = async (req, res) => {
       message: "Password and Confirm Password Should be the Same",
     });
   }
+  const check = {
+    email: req.body.email.toLowerCase(),
+  };
 
+  console.log(req.body.email);
   try {
     //checking if email already existed in database
-    User.findOne({ email: req.body.email }, async (err, responce) => {
+    User.findOne(check,(err, responce) => {
       if (err) {
         console.log("Error", err);
         return res.status(400).json({
@@ -25,7 +28,7 @@ exports.createUser = async (req, res) => {
       } else if (responce) {
         //sending error if email already there
         console.log("Response", responce);
-        return res.json({
+        return res.status(403).json({
           status: "Success",
           message: "Email id already Registerd Please use new one",
         });
@@ -39,7 +42,7 @@ exports.createUser = async (req, res) => {
             password: req.body.password,
           });
           //creating new user and saving it in the database
-          const newuser = await User.create(newUser, (err, responce) => {
+          const newuser = await User.create(newUser, (err, newres) => {
             if (err) {
               console.log(err);
               return res.status(400).json({
@@ -47,13 +50,21 @@ exports.createUser = async (req, res) => {
                 message: "Sorre Something Went Wrong",
               });
             }
-            if (responce) {
-              //Sending the responce if user is created
-              console.log(responce);
+            if (newres) {
+              const accesstoken = jwt.sign(
+                { name: newres.name, email: newres.email },
+                process.env.ACCESS_TOKEN_SECRET
+              );
+              //Sending the newres if user is created
+              console.log(newres);
               res.status(201).json({
                 status: "success",
                 data: {
-                  user: responce,
+                  user: {
+                    name: newres.name,
+                    email: newres.email,
+                  },
+                  accesstoken,
                 },
               });
             }
@@ -81,7 +92,7 @@ exports.loginUser = (req, res) => {
       if (err) {
         return res.status(400).json({
           status: "fail",
-          massage: "error",
+          message: "error",
           err,
         });
       } else if (responce) {
@@ -89,19 +100,20 @@ exports.loginUser = (req, res) => {
           if (check) {
             //if user logged in send the token to the front end
 
-            const accesstoken = jwt.sign({name:responce.name,email: responce.email},
-              process.env.ACCESS_TOKEN_SECRET)
+            const accesstoken = jwt.sign(
+              { name: responce.name, email: responce.email },
+              process.env.ACCESS_TOKEN_SECRET
+            );
 
-            
             return res.status(200).json({
               status: "Success",
-              data:{
+              data: {
                 user: {
                   name: responce.name,
-                  email: responce.email
+                  email: responce.email,
                 },
-                accesstoken
-              }
+                accesstoken,
+              },
             });
           } else if (error) {
             return res.status(400).json({
@@ -118,27 +130,26 @@ exports.loginUser = (req, res) => {
       } else {
         return res.status(404).json({
           status: "fail",
-          massage: "Email Invalid Please Try Again",
+          message: "Email Invalid Please Try Again",
         });
       }
     });
   } catch (e) {
     return res.status(400).json({
       status: "fail",
-      massage: "Sorry, Something Went Wrong",
+      message: "Sorry, Something Went Wrong",
       e,
     });
   }
 };
 
-
-exports.authenticateUserToken = (req,res,next)=>{
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]
-  if(token == null) return res.sendStatus(401)
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
-    if(err) return res.sendStatus(403)
-    req.user = user
-    next()
-  })
-}
+exports.authenticateUserToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
