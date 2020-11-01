@@ -25,6 +25,35 @@ topStories.findOne({ date: date }, async (err, responce)=>{
 
 }
 
+exports.getalldates = async (req,res) =>{
+
+  // const date = req.body.date;
+  // console.log(date)
+  // db.topstories.find({},{date:1})
+  try{
+  topStories.find({},{date:1}, async (err, responce)=>{
+    if(err){
+      res.status(400).json({
+        status: "fail",
+        message: "something went wrong"
+      })
+    }
+  
+    if(responce){
+      res.status(200).json({
+        status: "Success",
+        data: responce
+      })
+    }
+  })
+}catch(e){
+  console.log(e)
+}
+  
+  }
+
+
+
 exports.pushtopStories = async (req, res) => {
   const bbc = req.body.bbc;
   const toi = req.body.toi;
