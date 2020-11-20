@@ -73,7 +73,7 @@ exports.pushtopStories = async (req, res) => {
 
 
   try {
-    topStories.findOne({ date: s[2]+"-"+s[0]+"-"+s[1] }, async (err, responce) => {
+    topStories.findOne({ date: date }, async (err, responce) => {
       if (err) {
         console.log(err);
       }
@@ -114,7 +114,7 @@ exports.pushtopStories = async (req, res) => {
 
         console.log("responce");
       } else {
-        await topStories.create({ date: s[2]+"-"+s[0]+"-"+s[1], Updated_At: d, bbc,toi,wsj }, (err, responce) => {
+        await topStories.create({ Updated_At: Date(),date: date, bbc,toi,wsj }, (err, responce) => {
           if (err) {
             console.log(err);
             return res.status(400).json({
