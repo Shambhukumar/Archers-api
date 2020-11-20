@@ -59,6 +59,11 @@ exports.pushtopStories = async (req, res) => {
   const toi = req.body.toi;
   const wsj = req.body.wsj;
   const d = new Date();
+
+  const currentTime = new Date();
+  const currentOffset = currentTime.getTimezoneOffset();
+  const ISTOffset = 330; 
+  const ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
   const date = d.toLocaleDateString();
         const dates = date.split("/");
         const s = dates.map((e,el)=>{
@@ -114,7 +119,7 @@ exports.pushtopStories = async (req, res) => {
 
         console.log("responce");
       } else {
-        await topStories.create({ Updated_At: Date(),date: date, bbc,toi,wsj }, (err, responce) => {
+        await topStories.create({ Updated_At: ISTTime,date: date, bbc,toi,wsj }, (err, responce) => {
           if (err) {
             console.log(err);
             return res.status(400).json({
