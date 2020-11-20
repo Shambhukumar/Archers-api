@@ -135,6 +135,7 @@ exports.loginUser = (req, res) => {
       }
     });
   } catch (e) {
+    console.log(e);
     return res.status(400).json({
       status: "fail",
       message: "Sorry, Something Went Wrong",

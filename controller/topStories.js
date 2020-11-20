@@ -58,12 +58,22 @@ exports.pushtopStories = async (req, res) => {
   const bbc = req.body.bbc;
   const toi = req.body.toi;
   const wsj = req.body.wsj;
-  // console.log(req.body.data);
   const d = new Date();
   const date = d.toLocaleDateString();
+        const dates = date.split("/");
+        const s = dates.map((e,el)=>{
+          if(e.length < 2) {
+           return "0"+e
+            }else{
+             return e
+            } 
+        })
+       
+   
+
 
   try {
-    topStories.findOne({ date: date }, async (err, responce) => {
+    topStories.findOne({ date: s[2]+"-"+s[0]+"-"+s[1] }, async (err, responce) => {
       if (err) {
         console.log(err);
       }
@@ -104,7 +114,7 @@ exports.pushtopStories = async (req, res) => {
 
         console.log("responce");
       } else {
-        await topStories.create({ date: date, bbc,toi,wsj }, (err, responce) => {
+        await topStories.create({ date: s[2]+"-"+s[0]+"-"+s[1], Updated_At: d, bbc,toi,wsj }, (err, responce) => {
           if (err) {
             console.log(err);
             return res.status(400).json({

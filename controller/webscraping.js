@@ -8,6 +8,7 @@ const { response } = require("express");
 const request = require("request");
 
 exports.dataFatch = async (req, res) => {
+  try{
   let bbccom = [];
   request(bbc, (error, response, html) => {
     if (!error && response.statusCode === 200) {
@@ -148,4 +149,7 @@ exports.dataFatch = async (req, res) => {
     //   }
     // })
   });
+}catch(e){
+  console.log(e)
+}
 };
