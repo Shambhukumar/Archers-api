@@ -88,7 +88,8 @@ exports.pushtopStories = async (req, res) => {
         if (wsj) {
           await topStories.findByIdAndUpdate(
             { _id: id },
-            { wsj: wsj },
+            { wsj: wsj, Updated_At: ISTTime},
+            
             async (err, resp) => {
               err && console.log(err);
               resp && console.log(resp);
@@ -98,7 +99,7 @@ exports.pushtopStories = async (req, res) => {
         else if (bbc) {
           await topStories.findByIdAndUpdate(
             { _id: id },
-            { bbc: bbc },
+            { bbc: bbc, Updated_At: ISTTime },
             async (err, resp) => {
               err && console.log(err);
               resp && console.log(resp);
@@ -108,7 +109,7 @@ exports.pushtopStories = async (req, res) => {
         else if (toi) {
           await topStories.findByIdAndUpdate(
             { _id: id },
-            { toi: toi },
+            { toi: toi, Updated_At: ISTTime },
             async (err, resp) => {
               err && console.log(err);
               resp && console.log(resp);
