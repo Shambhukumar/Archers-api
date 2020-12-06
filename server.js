@@ -8,7 +8,7 @@ const webscraping = require("./webscraping")
 const topStories = require("./controller/topStories");
 app.use(cors())
 app.use(express.json());
-webscraping.dataFatch();
+
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE, {useNewUrlParser: true});
@@ -18,8 +18,8 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
  console.log("Connected To the DataBase")
 });
-
-setInterval(webscraping.dataFatch, 25 * 60 * 1000);
+webscraping.dataFatch();
+setInterval(webscraping.dataFatch, 5 * 60 * 1000);
 
 app.post("/signup",user.createUser)
 app.post("/login",user.loginUser)

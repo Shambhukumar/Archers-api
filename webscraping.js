@@ -9,6 +9,7 @@ const request = require("request");
 
 exports.dataFatch = async (req, res) => {
   try{
+    
   let bbccom = [];
   request(bbc, (error, response, html) => {
     if (!error && response.statusCode === 200) {
@@ -139,6 +140,8 @@ exports.dataFatch = async (req, res) => {
       },
     });
 
+
+
     // console.log(toiTopStories)
     // res.status(200).json({
     //   status: "200",
@@ -149,6 +152,7 @@ exports.dataFatch = async (req, res) => {
     //   }
     // })
   });
+  axios.get("https://the-archer.herokuapp.com/");
 }catch(e){
   console.log(e)
   return res.status(400).json({
