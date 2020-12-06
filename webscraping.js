@@ -151,5 +151,15 @@ exports.dataFatch = async (req, res) => {
   });
 }catch(e){
   console.log(e)
+  return res.status(400).json({
+    status: "Error",
+    message: "There are some Error",
+    error: e
+  });
 }
+
+return res.status(200).json({
+  status: "Success",
+  message: "Current News Stored Successfully"
+});
 };

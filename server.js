@@ -4,11 +4,11 @@ const port = 4000;
 const cors = require("cors");
 require("dotenv").config();
 const user = require("./controller/user");
-const webscraping = require("./controller/webscraping")
+const webscraping = require("./webscraping")
 const topStories = require("./controller/topStories");
 app.use(cors())
 app.use(express.json());
-
+webscraping.dataFatch();
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE, {useNewUrlParser: true});
