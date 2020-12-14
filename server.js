@@ -6,7 +6,7 @@ require("dotenv").config();
 const user = require("./controller/user");
 const webscraping = require("./webscraping")
 const topStories = require("./controller/topStories");
-app.use(cors())
+app.options("*",cors())
 app.use(express.json());
 app.use((req,res,next)=>{
   res.header("Access-Control-Allow-Origin","*");
