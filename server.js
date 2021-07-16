@@ -29,11 +29,12 @@ app.post("/signup",user.createUser)
 app.post("/login",user.loginUser)
 app.get("/data",webscraping.dataFatch)
 app.post("/topstories",topStories.pushtopStories);
-app.post("/getdata",user.authenticateUserToken,topStories.getallStories);
+app.post("/getdata",topStories.getallStories);
 app.get("/getalldates",topStories.getalldates);
 
 
 
 app.listen(process.env.PORT || port,()=>{
+  // topStories.pushtopStories();
   console.log(`Server is Running on PORT: ${port}`)
 })

@@ -2,9 +2,7 @@ const bbc = "https://www.bbc.com";
 const TimesOfIndia = "https://timesofindia.indiatimes.com";
 const WallStreetJurnal = "https://www.wsj.com/";
 const axios = require("axios");
-const { html } = require("cheerio");
 const cheerio = require("cheerio");
-const { response } = require("express");
 const request = require("request");
 
 exports.dataFatch = async (req, res) => {
@@ -106,39 +104,48 @@ exports.dataFatch = async (req, res) => {
   });
 
   let toiTopStories = [{ "Top-Stories": [], "Latest-Stoies": [] }];
-  request(TimesOfIndia, (error, response, html) => {
-    if (!error && response.statusCode === 200) {
-      const $ = cheerio.load(html);
-      const TimesofIndiaTopSotories = $("#lateststories li a");
-      TimesofIndiaTopSotories.each((e, el) => {
-        const linkText = $(el).text();
-        const link = $(el).attr("href");
-        if (linkText) {
-          toiTopStories[0]["Latest-Stoies"].push({
-            title: linkText,
-            link: TimesOfIndia +link,
-          });
-        }
-      });
-      const topStories = $(".top-story ul li a");
-      topStories.each((e, el) => {
-        const linkText = $(el).text();
-        const link = $(el).attr("href");
-        if(linkText){
-          toiTopStories[0]["Top-Stories"].push({ title: linkText, link: TimesOfIndia +link });
-        }
-        
-      });
-    }
+  request({url: TimesOfIndia}, (error, response, html) => {
+    // if (!error && response.statusCode === 200) {
+    //   const $ = cheerio.load(html);
+      
+    //   const TimesofIndiaTopSotories = $(".contentwrapper");
+    //   const k = TimesofIndiaTopSotories.find("figure");
+    //   // console.log(k.html())
+    //   k.each((e,el)=>{
+    //     const link = $(el).find("img");
+    //     console.log(link.attr("src"))
+    //   })
 
-    axios.post(process.env.APP_BASE_URL+"topstories", {
-      toi: {
-        TheTimesOfIndia: {
-          TotalCount: toiTopStories[0]["Top-Stories"].length + toiTopStories[0]["Latest-Stoies"].length ,
-          toiTopStories
-        },
-      },
-    });
+
+    //   TimesofIndiaTopSotories.each((e, el) => {
+    //     const linkText = $(el).text();
+    //     const link = $(el).attr("href");
+    //     if (linkText) {
+    //       toiTopStories[0]["Latest-Stoies"].push({
+    //         title: linkText,
+    //         link: TimesOfIndia +link,
+    //       });
+    //     }
+    //   });
+    //   const topStories = $(".top-story ul li a");
+    //   topStories.each((e, el) => {
+    //     const linkText = $(el).text();
+    //     const link = $(el).attr("href");
+    //     if(linkText){
+    //       toiTopStories[0]["Top-Stories"].push({ title: linkText, link: TimesOfIndia +link });
+    //     }
+        
+    //   });
+    // }
+
+    // axios.post(process.env.APP_BASE_URL+"topstories", {
+    //   toi: {
+    //     TheTimesOfIndia: {
+    //       TotalCount: toiTopStories[0]["Top-Stories"].length + toiTopStories[0]["Latest-Stoies"].length ,
+    //       toiTopStories
+    //     },
+    //   },
+    // });
 
 
 
@@ -149,10 +156,10 @@ exports.dataFatch = async (req, res) => {
     //       TotalCount: toiTopStories[0]["Top-Stories"].length + toiTopStories[0]["Latest-Stoies"].length ,
     //       toiTopStories
 
-    //   }
-    // })
-  });
-  axios.get("https://the-archer.herokuapp.com/");
+      // }
+    })
+  // });
+  // axios.get("https://the-archer.herokuapp.com/");
 }catch(e){
   console.log(e)
   return res.status(400).json({

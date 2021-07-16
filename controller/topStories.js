@@ -64,15 +64,11 @@ exports.pushtopStories = async (req, res) => {
   const currentOffset = currentTime.getTimezoneOffset();
   const ISTOffset = 330; 
   const ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
-  const date = d.toLocaleDateString();
-        const dates = date.split("/");
-        const s = dates.map((e,el)=>{
-          if(e.length < 2) {
-           return "0"+e
-            }else{
-             return e
-            } 
-        })
+
+const dat = d.getDate();
+const month = d.getMonth() + 1;
+const year = d.getFullYear();
+const date = month + "/" + dat + "/" + year;
        
    
 
