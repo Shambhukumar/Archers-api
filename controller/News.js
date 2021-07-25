@@ -1,5 +1,5 @@
 const News = require("../model/News");
-
+const jsonwebtoken = require("jsonwebtoken")
 const UploadDate = () => {
   let t = new Date;
   function format(m) {
@@ -100,7 +100,8 @@ exports.saveNews = async (req, res) => {
 
 
 exports.getNewsWithFilters = (req,res)=>{
-  console.log(req.user);
+
+  console.log(req.cookies.token);
   // Query Format {Category:{$in:["world","politics"]}, date: "22-Jul-2021"}
   // Projection {NYT: 1,BBC:1}
 
@@ -147,9 +148,42 @@ exports.getNewsWithFilters = (req,res)=>{
       })
     }else{
       return res.status(200).json({
-        status: "Succsess",
+        status: "Success",
         data: resp
       })
     }
   })
+}
+
+exports.getAllCategories = (req,res)=>{
+  let user = null;
+  let auth = false;
+  if(req.cookies.token){
+   user = jsonwebtoken.verify(req.cookies.token,process.env.ACCESS_TOKEN_SECRET).data[0]
+   user && (auth = true);
+  //  console.log(user)
+  }
+
+  const data = {};
+  data.user = user
+  data.Authenticated = auth;
+  News.distinct("Category",(err,resp)=>{
+    if(err){
+      console.log(err)
+      data.error = err;
+      return res.status(400).json({
+        status: "fail",
+        data
+      })
+    
+    }
+    if(resp){
+      data.Category = resp;
+      return res.status(200).json({
+        status: "Success",
+        data
+      })
+    }
+  })
+
 }

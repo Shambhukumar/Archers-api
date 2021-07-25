@@ -1,156 +1,134 @@
 const User = require("../model/user");
-const Utility = require("../services/utility");
-const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const jsonwebtoken = require("jsonwebtoken");
+// const jwt = require("express-jwt");
 
-exports.createUser = async (req, res) => {
-  //checking if password and confirm password same
-  if (req.body.password !== req.body.conformPassowrd) {
-    return res.status(401).json({
-      status: "Error",
-      message: "Password and Confirm Password Should be the Same",
-    });
-  }
-  const check = {
-    email: req.body.email.toLowerCase(),
-  };
 
-  console.log(req.body.email);
-  try {
-    //checking if email already existed in database
-    User.findOne(check,(err, responce) => {
-      if (err) {
-        console.log("Error", err);
-        return res.status(400).json({
-          status: "fail",
-          message: "Sorre Something Went Wrong",
-          err,
-        });
-      } else if (responce) {
-        //sending error if email already there
-        console.log("Response", responce);
-        return res.status(403).json({
-          status: "Success",
-          message: "Email id already Registerd Please use new one",
-        });
-      } else {
-        //using bcrypt to transform password to hash password
-        Utility.hash(req.body.password, async (err, hash) => {
-          req.body.password = hash;
-          const newUser = new User({
-            name: req.body.name,
-            email: req.body.email.toLowerCase(),
-            password: req.body.password,
-          });
-          //creating new user and saving it in the database
-          const newuser = await User.create(newUser, (err, newres) => {
-            if (err) {
-              console.log(err);
-              return res.status(400).json({
-                status: "fail",
-                message: "Sorre Something Went Wrong",
-              });
+
+exports.createUser = async(req,res)=>{
+
+    const data = req.body.data;
+
+// converting plain password into hash using bcrypt
+     const user = new User(data);
+     const salt = await bcrypt.genSalt(10);
+     user.password = await bcrypt.hash(user.password, salt);
+
+
+    User.create(user,(err,resp)=>{
+        if (err) {
+            console.log(err);
+            if(err.code && (err.code = 11000)){
+                return res.status(409).json({
+                    status: "fail",
+                    message: "Account already Created with this email Address",
+                  });
+            }else{
+                return res.status(400).json({
+                    status: "fail",
+                    message: "Sorre Something Went Wrong",
+                    error: err.message
+                  });
             }
-            if (newres) {
-              const accesstoken = jwt.sign(
-                { name: newres.name, email: newres.email },
-                process.env.ACCESS_TOKEN_SECRET
-              );
-              //Sending the newres if user is created
-              console.log(newres);
-              res.status(201).json({
-                status: "success",
-                data: {
-                  user: {
-                    name: newres.name,
-                    email: newres.email,
-                  },
-                  accesstoken,
-                },
-              });
-            }
-          });
-        });
-      }
-    });
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json({
-      status: "fail",
-      message: "Sorre Something Went Wrong",
-      e,
-    });
-  }
-};
-
-exports.loginUser = (req, res) => {
-  try {
-    const check = {
-      email: req.body.email.toLowerCase(),
-    };
-
-    User.findOne(check, (err, responce) => {
-      if (err) {
-        return res.status(400).json({
-          status: "fail",
-          message: "error",
-          err,
-        });
-      } else if (responce) {
-        Utility.check(req.body.password, responce.password, (error, check) => {
-          if (check) {
-            //if user logged in send the token to the front end
-
-            const accesstoken = jwt.sign(
-              { name: responce.name, email: responce.email },
-              process.env.ACCESS_TOKEN_SECRET
-            );
-
-            return res.status(200).json({
-              status: "Success",
+            
+          }
+          if (resp) {
+            console.log(resp);
+            res.status(200).json({
+              status: "success",
               data: {
-                user: {
-                  name: responce.name,
-                  email: responce.email,
-                },
-                accesstoken,
+                user: resp,
               },
             });
-          } else if (error) {
+          }
+
+    })
+}
+
+exports.login = (req,res)=>{
+    const {email, password} = req.body.data;
+    // console.log(req.body.data.email)
+    if(!email || !password){
+        return res.status(401).json({
+            status: "fails",
+            message: "Please provide your email and password"
+        })
+    }
+    User.find({email},async(err,resp)=>{
+        if(err){
+            console.log(err)
             return res.status(400).json({
-              status: "error",
-              message: "We Are Having a Error",
-            });
-          } else {
-            return res.status(401).json({
-              status: "failed",
-              message: "Password is Incorrect",
+                status: "fails",
+                message: err.message
+            })
+        }
+        if(resp){
+            if(resp.length === 0){
+                return res.status(403).json({
+                    status: "success",
+                    message: "Sorry eather your email or password is wrong"
+                })
+            }
+
+            // validating the password by comparing with bcrypt
+             ;
+            
+            const PasswordValidator = await bcrypt.compare(password, resp[0].password)
+            if(PasswordValidator){
+
+                resp[0].password = undefined;
+                const token = jsonwebtoken.sign({data: resp}, process.env.ACCESS_TOKEN_SECRET)
+                console.log(token)
+                res.cookie('token', token, { httpOnly: true });
+                return res.status(200).json({
+                    status: "success",
+                    message: "User logged in succesfully" 
+                })
+
+            }else{
+                return res.status(403).json({
+                    status: "success",
+                    message: "Sorry eather your email or password is wrong"
+                })
+            }
+           
+        }
+    })
+
+}
+
+exports.logout = (req,res) =>{
+    console.log("working")
+    res.clearCookie("token","check",{ httpOnly: true })
+    return res.status(202).json({
+        status: "success",
+        message: "user logged out"
+    })
+}
+
+exports.getUser = async(req,res)=>{
+
+    const {name, Category, password,email} = req.body.data;
+
+    await User.find({}, (err,resp)=>{
+        if (err) {
+            console.log(err);
+            return res.status(400).json({
+              status: "fail",
+              message: "Sorre Something Went Wrong",
+              err: err.message
             });
           }
-        });
-      } else {
-        return res.status(404).json({
-          status: "fail",
-          message: "Email Invalid Please Try Again",
-        });
-      }
-    });
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json({
-      status: "fail",
-      message: "Sorry, Something Went Wrong",
-      e,
-    });
-  }
-};
+          if (resp) {
+            console.log(resp);
+            res.status(200).json({
+              status: "success",
+              data: {
+                user: resp,
+              },
+            });
+          }
 
-exports.authenticateUserToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == null) return res.sendStatus(401);
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-};
+    })
+
+}
