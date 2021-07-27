@@ -5,6 +5,7 @@ const cors = require("cors");
 require("dotenv").config();
 const NewsRouter = require("./router/newsRoute");
 const UserRouter = require("./router/userRoute");
+const NewsScraper = require("./NewsScraper");
 
 
 // const user = require("./controller/user");
@@ -17,11 +18,7 @@ app.use(cors({
   methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
   credentials: true
 }));
-// app.use((req,res,next)=>{
-//   res.header("Access-Control-Allow-Origin","*");
-//   res.header("Access-Control-Allow-Headers", "Origin, x-Requested-With, Content-Type, Accept")
-//   next();
-// });
+
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE, 
@@ -35,16 +32,11 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
  console.log("Connected To the DataBase")
 });
-// webscraping.dataFatch();
-// setInterval(webscraping.dataFatch, 5 * 60 * 1000);
-
-// app.post("/signup",user.createUser)
-// app.post("/login",user.loginUser)
-// app.get("/data",webscraping.dataFatch)
+NewsScraper.init();
+// setInterval(NewsScraper.init, 5 * 60 * 1000);
 app.use("/news",NewsRouter);
 app.use("/user",UserRouter)
-// app.post("/getdata",News.getallStories);
-// app.get("/getalldates",News.getalldates);
+
 
 
 

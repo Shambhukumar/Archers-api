@@ -32,11 +32,11 @@ exports.saveNews = async (req, res) => {
   
 
   const findObj = {
-    Category,
-    date
+    Category
   }
 
   const UpdateObj = {
+    date,
     [brodcaster]: news
   }
  
@@ -46,7 +46,7 @@ exports.saveNews = async (req, res) => {
         console.log(err);
       }
       if (responce) {
-        // console.log(responce)
+        console.log(responce)
         const id = responce._id;
         await News.findByIdAndUpdate(
           { _id: id },
@@ -100,8 +100,6 @@ exports.saveNews = async (req, res) => {
 
 
 exports.getNewsWithFilters = (req,res)=>{
-
-  console.log(req.cookies.token);
   // Query Format {Category:{$in:["world","politics"]}, date: "22-Jul-2021"}
   // Projection {NYT: 1,BBC:1}
 
@@ -133,7 +131,6 @@ exports.getNewsWithFilters = (req,res)=>{
   }
 
   let Category = {}
-  Category.date = query.date ? query.date : TodayDate;
   query.Category && (Category.Category =  {$in: [...JSON.parse(query.Category)]})
 
   console.log(Category);

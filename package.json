@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "bcrypt": "^5.0.0",
+    "chalk": "^4.1.1",
     "cheerio": "^1.0.0-rc.3",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -20,6 +21,7 @@
     "express-jwt": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.6",
+    "puppeteer": "^10.1.0",
     "request": "^2.88.2"
   }
 }

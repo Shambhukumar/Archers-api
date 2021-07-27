@@ -1,14 +1,9 @@
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
-// const jwt = require("express-jwt");
-
-
 
 exports.createUser = async(req,res)=>{
-
     const data = req.body.data;
-
 // converting plain password into hash using bcrypt
      const user = new User(data);
      const salt = await bcrypt.genSalt(10);
@@ -75,13 +70,16 @@ exports.login = (req,res)=>{
             
             const PasswordValidator = await bcrypt.compare(password, resp[0].password)
             if(PasswordValidator){
-
                 resp[0].password = undefined;
                 const token = jsonwebtoken.sign({data: resp}, process.env.ACCESS_TOKEN_SECRET)
                 console.log(token)
                 res.cookie('token', token, { httpOnly: true });
                 return res.status(200).json({
                     status: "success",
+                    data:{
+                        user: resp,
+                        Authenticated: true 
+                    },
                     message: "User logged in succesfully" 
                 })
 
@@ -99,7 +97,7 @@ exports.login = (req,res)=>{
 
 exports.logout = (req,res) =>{
     console.log("working")
-    res.clearCookie("token","check",{ httpOnly: true })
+    res.clearCookie("token",{ httpOnly: true })
     return res.status(202).json({
         status: "success",
         message: "user logged out"
@@ -107,9 +105,6 @@ exports.logout = (req,res) =>{
 }
 
 exports.getUser = async(req,res)=>{
-
-    const {name, Category, password,email} = req.body.data;
-
     await User.find({}, (err,resp)=>{
         if (err) {
             console.log(err);
