@@ -33,7 +33,7 @@ db.once('open', function() {
  console.log("Connected To the DataBase")
 });
 NewsScraper.init();
-// setInterval(NewsScraper.init, 5 * 60 * 1000);
+setInterval(NewsScraper.init, 5 * 60 * 1000);
 app.use("/news",NewsRouter);
 app.use("/user",UserRouter)
 
