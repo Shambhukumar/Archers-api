@@ -4,7 +4,7 @@ const axios = require("axios");
 const error = chalk.bold.red;
 const fs = require("fs")
 const headlessStatus = true;
-const Categories = ["world","politics","coronavirus","business","sports","health","travel","technology","food", "home", "asia", "uk"];
+const Categories = ["home","world","politics","coronavirus","business","sports","health","travel","technology","food","asia", "uk"];
 // const Categories = ["politics"];
 exports.init = async()=>{
     for(let i=0; i<Categories.length;i++){
@@ -182,7 +182,9 @@ const Gurdian = async(e)=>{
         console.log(error(e));
         await browser.close();
         console.log(error("Browser Closed"))
-    }
+    }finally {
+        await browser.close();
+      }
 }
 
 const NYT = async (e) =>{
@@ -287,13 +289,15 @@ const NYT = async (e) =>{
         }else{
             return null;
         }
-        // await browser.close()
+        await browser.close()
 
     } catch (e) {
         console.log(error(e));
         await browser.close();
         console.log(error("Browser Closed"))
-    }
+    }finally {
+        await browser.close();
+      }
 }
 
 const CNN = async(e)=>{
@@ -372,12 +376,14 @@ const CNN = async(e)=>{
         }else{
             return null;
         }
-        // await browser.close()
+        await browser.close()
 
     } catch (e) {
         console.log(error(e));
         await browser.close();
         console.log(error("Browser Closed"))
-    }
+    }finally {
+        await browser.close();
+      }
 }
 
