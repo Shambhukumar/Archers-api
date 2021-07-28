@@ -86,7 +86,7 @@ exports.login = (req,res)=>{
                 resp[0].password = undefined;
                 const token = jsonwebtoken.sign({data: resp}, process.env.ACCESS_TOKEN_SECRET)
                 console.log(token)
-                res.cookie('token', token, { httpOnly: true });
+                res.cookie('token', token, { sameSite: "none", secure: true });
                 return res.status(200).json({
                     status: "success",
                     data:{
