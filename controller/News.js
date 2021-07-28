@@ -19,9 +19,11 @@ exports.saveNews = async (req, res) => {
   //   brodcaster: "NYT",
   //   data: news
   // }
-  const t = new Date();
+  const d = new Date();
+  const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  const nd = new Date(utc + (3600000*+5.5));
 
-  const time = t.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+  const time = nd.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 
 
   const {Category, brodcaster, news} = req.body.data
