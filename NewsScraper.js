@@ -26,7 +26,10 @@ const BBC = async(e) => {
     else if(e== "uk"){
         url =`https://www.bbc.com/news/uk`
     }
-        var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox']  })
+        var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox',  "--incognito",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote"]  })
         var page = await browser.newPage();
         // await page.setDefaultNavigationTimeout(0); 
         await page.goto(url)
@@ -118,7 +121,10 @@ const Gurdian = async(e)=>{
         url = `https://www.theguardian.com/world/asia`
     }
     try {
-        var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox'] })
+        var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox',  "--incognito",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote"] })
         var page = await browser.newPage();
         // await page.setDefaultNavigationTimeout(0); 
         await page.goto(url)
@@ -197,7 +203,10 @@ const NYT = async (e) =>{
         else if(e === "uk"){
             url = 'https://www.nytimes.com/topic/destination/great-britain'
         }
-        var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox'] })
+        var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox',  "--incognito",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote"] })
         var page = await browser.newPage();
         // await page.setDefaultNavigationTimeout(0); 
         await page.goto(url)
@@ -307,7 +316,10 @@ const CNN = async(e)=>{
         if(e === "home"){
             url = `https://edition.cnn.com/`
         }
-        var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox'] })
+        var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox',  "--incognito",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote"] })
         var page = await browser.newPage();
         // await page.setDefaultNavigationTimeout(0); 
         await page.goto(url)
