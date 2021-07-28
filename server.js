@@ -1,4 +1,5 @@
 const express = require("express")
+const session = require("express-session");
 const app = express();
 const port = 4000;
 const cors = require("cors");
@@ -12,6 +13,19 @@ const NewsScraper = require("./NewsScraper");
 // const webscraping = require("./webscraping")
 // const News = require("./controller/News");
 // app.options("*",cors())
+app.use(session({
+  name: "random_session",
+  secret: "yryGGeugidx34otGDuSF5sD9R8g0Gü3r8",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+      path: "/",
+      secure: true,
+      //domain: ".herokuapp.com", REMOVE THIS HELPED ME (I dont use a domain anymore)
+      httpOnly: true
+  }
+}))
+
 app.use(express.json({limit: "10MB"}));
 app.use(cors({
   origin: true,
