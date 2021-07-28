@@ -7,25 +7,6 @@ require("dotenv").config();
 const NewsRouter = require("./router/newsRoute");
 const UserRouter = require("./router/userRoute");
 const NewsScraper = require("./NewsScraper");
-
-
-// const user = require("./controller/user");
-// const webscraping = require("./webscraping")
-// const News = require("./controller/News");
-// app.options("*",cors())
-// app.use(session({
-//   name: "random_session",
-//   secret: "yryGGeugidx34otGDuSF5sD9R8g0Gü3r8",
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: {
-//       path: "/",
-//       secure: true,
-//       domain: "https://the-archer.herokuapp.com/",
-//       httpOnly: true
-//   }
-// }))
-
 app.use(express.json({limit: "10MB"}));
 app.use(cors({
   origin: true,

@@ -39,7 +39,7 @@ const {email, name, password} = data
             console.log(resp);
             resp.password = undefined;
             const token = jsonwebtoken.sign({data: [resp]}, process.env.ACCESS_TOKEN_SECRET)
-            res.cookie('token', token, { httpOnly: true });
+            res.cookie('token', token, { sameSite: "none", secure: true });
             return res.status(200).json({
                 status: "success",
                 data:{
@@ -110,7 +110,7 @@ exports.login = (req,res)=>{
 
 exports.logout = (req,res) =>{
     console.log("working")
-    res.clearCookie("token",{ httpOnly: true })
+    res.clearCookie("token",{ sameSite: "none", secure: true })
     return res.status(202).json({
         status: "success",
         message: "user logged out"
