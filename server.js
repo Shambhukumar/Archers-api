@@ -1,5 +1,4 @@
 const express = require("express")
-const session = require("express-session");
 const app = express();
 const port = 4000;
 const cors = require("cors");
@@ -31,6 +30,7 @@ NewsScraper.init();
 setInterval(NewsScraper.init, 15 * 60 * 1000);
 app.use("/news",NewsRouter);
 app.use("/user",UserRouter)
+app.use("/runscraper", NewsScraper.init)
 
 
 
