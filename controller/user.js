@@ -5,16 +5,24 @@ const jsonwebtoken = require("jsonwebtoken");
 exports.createUser = async(req,res)=>{
     const data = req.body.data;
 // converting plain password into hash using bcrypt
-     const user = new User(data);
+// console.log(data)
+const {email, name, password} = data
+     const user = new User({name,email,password});
+     console.log(user)
      const salt = await bcrypt.genSalt(10);
      user.password = await bcrypt.hash(user.password, salt);
+     if(data.password !== data.conformPassowrd){
+        return res.status(401).json({
+            status: "fail",
+            message: "password and confirm password should be same",
+          });
+     }
 
-
-    User.create(user,(err,resp)=>{
+     User.create(user,(err,resp)=>{
         if (err) {
             console.log(err);
             if(err.code && (err.code = 11000)){
-                return res.status(409).json({
+                return res.status(403).json({
                     status: "fail",
                     message: "Account already Created with this email Address",
                   });
@@ -29,12 +37,17 @@ exports.createUser = async(req,res)=>{
           }
           if (resp) {
             console.log(resp);
-            res.status(200).json({
-              status: "success",
-              data: {
-                user: resp,
-              },
-            });
+            resp.password = undefined;
+            const token = jsonwebtoken.sign({data: [resp]}, process.env.ACCESS_TOKEN_SECRET)
+            res.cookie('token', token, { httpOnly: true });
+            return res.status(200).json({
+                status: "success",
+                data:{
+                    user: resp,
+                    Authenticated: true 
+                },
+                message: "User Signed Up in Succesfully" 
+            })
           }
 
     })
