@@ -28,9 +28,9 @@ const BBC = async(e) => {
     }
         var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox']  })
         var page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(0); 
+        // await page.setDefaultNavigationTimeout(0); 
         await page.goto(url)
-        await page.waitForSelector("img")
+        // await page.waitForSelector("img")
         const CurrentCategory = e;
         const news = await page.evaluate((CurrentCategory) => {
             const middlebbc = document.querySelectorAll('.gs-c-promo');
@@ -120,9 +120,9 @@ const Gurdian = async(e)=>{
     try {
         var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox'] })
         var page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(0); 
+        // await page.setDefaultNavigationTimeout(0); 
         await page.goto(url)
-        await page.waitForSelector("img")
+        // await page.waitForSelector("img")
         const CurrentCategory = e;
         const news = await page.evaluate((CurrentCategory) => {
 
@@ -199,12 +199,12 @@ const NYT = async (e) =>{
         }
         var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox'] })
         var page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(0); 
+        // await page.setDefaultNavigationTimeout(0); 
         await page.goto(url)
         // await page.waitForSelector("img")
         const CurrentCategory = e;
         const news = await page.evaluate((CurrentCategory) => {
-            window.scrollBy(0, window.document.body.scrollHeight)
+            // window.scrollBy(0, window.document.body.scrollHeight)
             const list = document.querySelectorAll('article');
             const FilterdNews = [];
             //latest news NYT
@@ -309,7 +309,7 @@ const CNN = async(e)=>{
         }
         var browser = await puppeteer.launch({ headless: headlessStatus, args: ['--no-sandbox','--disable-setuid-sandbox'] })
         var page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(0); 
+        // await page.setDefaultNavigationTimeout(0); 
         await page.goto(url)
         // await page.waitForNavigation();
         // await page.waitForSelector("img")
