@@ -21,7 +21,7 @@ app.use(session({
   cookie: {
       path: "/",
       secure: true,
-      //domain: ".herokuapp.com", REMOVE THIS HELPED ME (I dont use a domain anymore)
+      domain: "https://the-archer.herokuapp.com/",
       httpOnly: true
   }
 }))
