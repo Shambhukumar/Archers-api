@@ -19,6 +19,10 @@ exports.saveNews = async (req, res) => {
   //   brodcaster: "NYT",
   //   data: news
   // }
+  const t = new Date();
+
+  const time = t.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+
 
   const {Category, brodcaster, news} = req.body.data
 
@@ -27,6 +31,7 @@ exports.saveNews = async (req, res) => {
     date,
     Category: Category,
     [brodcaster]: news,
+    time
 
   }
   
@@ -37,7 +42,8 @@ exports.saveNews = async (req, res) => {
 
   const UpdateObj = {
     date,
-    [brodcaster]: news
+    [brodcaster]: news,
+    time
   }
  
   try {

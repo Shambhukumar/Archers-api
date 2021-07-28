@@ -6,7 +6,8 @@ const newsSchema = new mongoose.Schema({
         CNN: {type: Array, unique:false, default: undefined},
         NYT: {type: Array, unique:false, default: undefined},
         BBC: {type: Array, unique:false, default: undefined},
-        Guardian: {type: Array, unique:false, default: undefined}
+        Guardian: {type: Array, unique:false, default: undefined},
+        time: {type: String}
     
 })
 
