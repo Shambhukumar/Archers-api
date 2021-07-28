@@ -7,13 +7,13 @@ const headlessStatus = true;
 const Categories = ["world","politics","coronavirus","business","sports","health","travel","technology","food", "home", "asia", "uk"];
 // const Categories = ["politics"];
 exports.init = async()=>{
-    Categories.map(async(e,el)=>{
-        await BBC(e)
-        await Gurdian(e)
-        await NYT(e)
-        await CNN(e)
-        console.log("fineshed Web Scraping")
-    })
+    for(let i=0; i<Categories.length;i++){
+        await BBC(Categories[i])
+        await Gurdian(Categories[i])
+        await NYT(Categories[i])
+        await CNN(Categories[i])
+        console.log("Process fineshed")
+    }
 }
 
 const BBC = async(e) => {
