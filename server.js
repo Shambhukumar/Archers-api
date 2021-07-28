@@ -32,7 +32,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
  console.log("Connected To the DataBase")
 });
-// NewsScraper.init();
+NewsScraper.init();
 setInterval(NewsScraper.init, 30 * 60 * 1000);
 app.use("/news",NewsRouter);
 app.use("/user",UserRouter)
