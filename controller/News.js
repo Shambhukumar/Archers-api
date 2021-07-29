@@ -70,8 +70,9 @@ exports.saveNews = async (req, res) => {
             if (resp) {
               // console.log(resp);
               return res.status(200).json({
-                status: "Succsecc",
-                data: resp,
+                status: "Succsess",
+                message: "successfully updated",
+                data: true
               });
             }
 
