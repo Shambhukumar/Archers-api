@@ -54,7 +54,7 @@ exports.saveNews = async (req, res) => {
         console.log(err);
       }
       if (responce) {
-        console.log(responce)
+        console.log("Find the Category Now Updating it")
         const id = responce._id;
         await News.findByIdAndUpdate(
           { _id: id },

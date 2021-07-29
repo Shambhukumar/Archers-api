@@ -5,7 +5,7 @@ const error = chalk.bold.red;
 const fs = require("fs")
 const headlessStatus = true;
 const Categories = ["home","world","politics","coronavirus","business","sports","health","travel","technology","food","asia", "uk"];
-// const Categories = ["politics"];
+// const Categories = ["travel"];
 exports.init = async()=>{
     for(let i=0; i<Categories.length;i++){
         await BBC(Categories[i])
@@ -84,6 +84,7 @@ const BBC = async(e) => {
         },CurrentCategory)
 
         console.log("browser Closed");
+        await browser.close()
         // console.log(news);
         if(news.length > 1){
            await axios.post(process.env.APP_BASE_URL+`saveNews`, {
@@ -99,7 +100,7 @@ const BBC = async(e) => {
             return null;
         }
         
-        await browser.close()
+        // await browser.close()
 
     } catch (e) {
         console.log(error(e));
@@ -167,6 +168,7 @@ const Gurdian = async(e)=>{
         }, CurrentCategory)
 
         console.log("browser Closed");
+        await browser.close()
         // console.log(news)
         if(news.length > 1){
             // NewsArchived.push({Brodcaster: "Guardian",news})
@@ -182,7 +184,7 @@ const Gurdian = async(e)=>{
         }else{
             return null;
         }
-        await browser.close()
+        // await browser.close()
 
     } catch (e) {
         console.log(error(e));
@@ -278,14 +280,9 @@ const NYT = async (e) =>{
         }, CurrentCategory)
 
         console.log("browser Closed");
+        await browser.close()
         // console.log(news)
         if(news.length > 1){
-            // NewsArchived.push({Brodcaster: "NYT",news})
-            // await axios.post(process.env.APP_BASE_URL+`saveNews`, {
-            //     [e]: {
-            //         NYT: news           
-            //     }
-            // })
             await axios.post(process.env.APP_BASE_URL+`saveNews`, {
                 data: {
                     Category: e,
@@ -298,7 +295,7 @@ const NYT = async (e) =>{
         }else{
             return null;
         }
-        await browser.close()
+        // await browser.close()
 
     } catch (e) {
         console.log(error(e));
@@ -373,6 +370,7 @@ const CNN = async(e)=>{
         }, CurrentCategory)
 
         console.log("browser Closed");
+        await browser.close()
         // console.log(news)
         if(news.length > 9){
             // NewsArchived.push({Brodcaster: "CNN",news})
@@ -388,7 +386,7 @@ const CNN = async(e)=>{
         }else{
             return null;
         }
-        await browser.close()
+        // await browser.close()
 
     } catch (e) {
         console.log(error(e));
