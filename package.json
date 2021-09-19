@@ -24,5 +24,8 @@
     "mongoose": "^5.10.6",
     "puppeteer": "^10.1.0",
     "request": "^2.88.2"
+  },
+  "engines": {
+    "node": "^10"
   }
 }
